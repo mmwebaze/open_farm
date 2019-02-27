@@ -1,0 +1,58 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.milking_data.amount
+    - field.field.node.milking_data.animal
+    - field.field.node.milking_data.period
+    - field.field.node.milking_data.collection_date
+    - node.type.milking_data
+  module:
+    - datetime
+    - path
+id: node.milking_data.default
+targetEntityType: node
+bundle: milking_data
+mode: default
+content:
+  amount:
+    type: number
+    weight: 8
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  animal:
+    type: entity_reference_autocomplete
+    weight: 9
+    region: content
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  period:
+    type: entity_reference_autocomplete
+    label: above
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    region: content
+  collection_date:
+    weight: 121
+    type: datetime_default
+    region: content
+    third_party_settings: {  }
+    settings: {  }
+  #body:
+  #  label: hidden
+  #  type: text_textarea_with_summary
+  #  weight: 101
+  #  settings: {  }
+  #  third_party_settings: {  }
+  links:
+    weight: 100
+hidden: {  }

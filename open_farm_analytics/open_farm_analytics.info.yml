@@ -1,0 +1,7 @@
+name: 'open_farm_analytics'
+type: module
+description: 'Open Farm Analytics Module'
+core: 8.x
+package: 'farm'
+dependencies:
+  - open_farm:open_farm

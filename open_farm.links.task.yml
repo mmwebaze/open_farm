@@ -1,0 +1,44 @@
+# Animal routing definition
+animal.settings_tab:
+  route_name: animal.settings
+  title: 'Settings'
+  base_route: animal.settings
+
+entity.animal.canonical:
+  route_name: entity.animal.canonical
+  base_route: entity.animal.canonical
+  title: 'View'
+
+entity.animal.edit_form:
+  route_name: entity.animal.edit_form
+  base_route: entity.animal.canonical
+  title: 'Edit'
+
+entity.animal.delete_form:
+  route_name:  entity.animal.delete_form
+  base_route:  entity.animal.canonical
+  title: Delete
+  weight: 10
+
+# Open farm data store routing definition
+open_farm_data_store.settings_tab:
+  route_name: open_farm_data_store.settings
+  title: 'Settings'
+  base_route: open_farm_data_store.settings
+
+entity.open_farm_data_store.canonical:
+  route_name: entity.open_farm_data_store.canonical
+  base_route: entity.open_farm_data_store.canonical
+  title: 'View'
+
+entity.open_farm_data_store.edit_form:
+  route_name: entity.open_farm_data_store.edit_form
+  base_route: entity.open_farm_data_store.canonical
+  title: 'Edit'
+
+entity.open_farm_data_store.delete_form:
+  route_name:  entity.open_farm_data_store.delete_form
+  base_route:  entity.open_farm_data_store.canonical
+  title: Delete
+  weight: 10
+

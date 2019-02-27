@@ -1,0 +1,15 @@
+
+open_farm_analytics.open_farm_analytics_management_form:
+  path: '/open_farm/analytics/management'
+  defaults:
+    _form: '\Drupal\open_farm_analytics\Form\OpenFarmAnalyticsManagementForm'
+   # _title: 'OpenFarmAnalyticsManagementForm'
+  requirements:
+    _access: 'TRUE'
+  
+open_farm_analytics.visualizer_form:
+  path: '/open_farm/analytics/visualizer'
+  defaults:
+    _form: '\Drupal\open_farm_analytics\Form\OpenFarmAnalyticsVisualizerForm'
+  requirements:
+    _permission: 'access administration pages'

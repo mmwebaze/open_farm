@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - open_farm
+name: Animal Types
+vid: animal_type
+description: 'Group animals by type (species).'
+hierarchy: 0
+weight: 0

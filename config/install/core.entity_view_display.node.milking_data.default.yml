@@ -1,0 +1,55 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.milking_data.amount
+    - field.field.node.milking_data.animal
+    - field.field.node.milking_data.period
+    - field.field.node.milking_data.collection_date
+    - node.type.milking_data
+  module:
+    - user
+    - open_farm
+    - datetime
+id: node.milking_data.default
+targetEntityType: node
+bundle: milking_data
+mode: default
+content:
+  amount:
+    type: number_integer
+    weight: 3
+    region: content
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+  period:
+    type: entity_reference_label
+    label: above
+    weight: 1
+    settings:
+      link: true
+    third_party_settings: {  }
+    region: content
+  animal:
+    type: entity_reference_label
+    label: above
+    weight: 0
+    settings:
+      link: true
+    third_party_settings: {  }
+    region: content
+  collection_date:
+    weight: 101
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  links:
+    weight: 100
+hidden: {  }

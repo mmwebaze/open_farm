@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains open_farm.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function open_farm_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the open_farm module.
+    case 'help.page.open_farm':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Manages records of animal farms') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function open_farm_theme() {
+  return [
+    'open_farm' => [
+      'render element' => 'children',
+    ],
+  ];
+}

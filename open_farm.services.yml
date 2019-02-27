@@ -1,0 +1,10 @@
+services:
+  open_farm.manager_service:
+    class: Drupal\open_farm\Service\OpenFarmServiceManager
+    arguments: ['@entity_type.manager']
+  open_farm.data_manager:
+    class: Drupal\open_farm\Service\OpenFarmDataManager
+    arguments: ['@open_farm.manager_service', '@database']
+  plugin.manager.periods:
+    class: Drupal\open_farm\Plugin\Period\PeriodManager
+    parent: default_plugin_manager

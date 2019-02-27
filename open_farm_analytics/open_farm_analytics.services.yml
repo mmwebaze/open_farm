@@ -1,0 +1,4 @@
+services:
+  open_farm_analytics.manager_service:
+    class: Drupal\open_farm_analytics\Service\OpenFarmAnalyticsManager
+    arguments: ['@open_farm.manager_service', '@database']

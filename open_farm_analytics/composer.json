@@ -1,0 +1,14 @@
+{
+  "name": "drupal/open_farm_analytics",
+  "type": "drupal-module",
+  "description": "My Awesome Module",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/open_farm_analytics",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/open_farm_analytics",
+    "source": "http://cgit.drupalcode.org/open_farm_analytics"
+  },
+  "require": { }
+}

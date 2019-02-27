@@ -1,0 +1,45 @@
+open_farm.main_menu:
+  path: 'admin/open_farm'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Open Farm'
+  requirements:
+    _permission: 'access administration pages'
+
+open_farm.reports_menu:
+  path: 'admin/open_farm/reports'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Open Farm Reports'
+  requirements:
+    _permission: 'access administration pages'
+
+#open_farm.open_farm_controller_milkCollection:
+#  path: '/open_farm/milk_collection'
+#  defaults:
+#    _controller: '\Drupal\open_farm\Controller\OpenFarmController::milkCollection'
+#    _title: 'collect milk'
+#  requirements:
+#    _permission: 'access content'
+#open_farm.open_farm_controller_eggCollection:
+#  path: '/open_farm/egg_collection'
+#  defaults:
+#    _controller: '\Drupal\open_farm\Controller\OpenFarmController::eggCollection'
+#    _title: 'collect eggs'
+#  requirements:
+#    _permission: 'access content'
+
+open_farm.open_farm_collection_form:
+  path: '/open_farm/form/open_farm_collection'
+  defaults:
+    _form: '\Drupal\open_farm\Form\OpenFarmCollectionForm'
+    _title: 'Open Farm Collection Form'
+  requirements:
+    _permission: 'access content'
+  
+open_farm.open_farm_collected_data_form:
+  path: '/open_farm/form/open_farm_collected'
+  defaults:
+    _form: '\Drupal\open_farm\Form\CollectedDataForm'
+  requirements:
+    _permission: 'access content'

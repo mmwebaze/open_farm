@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - open_farm
+id: node.milking_data.amount
+field_name: amount
+entity_type: node
+type: integer
+settings: { }
+#  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

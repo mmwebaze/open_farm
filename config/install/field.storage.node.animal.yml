@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - open_farm
+    - node
+id: node.animal
+field_name: animal
+entity_type: node
+type: entity_reference
+settings:
+  target_type: animal
+module: open_farm
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

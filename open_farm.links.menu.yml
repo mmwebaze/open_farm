@@ -1,0 +1,48 @@
+open_farm.main_menu:
+  title: 'Open Farm'
+  description: 'Manage farm.'
+  route_name: 'open_farm.main_menu'
+  weight: -9
+  parent: 'system.admin'
+
+# Animal menu items definition
+entity.animal.collection:
+  title: 'Animal list'
+  route_name: entity.animal.collection
+  description: 'List Animal entities'
+  parent: open_farm.main_menu
+  weight: 100
+
+animal.admin.structure.settings:
+  title: 'Animal settings'
+  description: 'Configure Animal entities'
+  route_name: animal.settings
+  parent: open_farm.main_menu
+
+# Open farm data store menu items definition
+entity.open_farm_data_store.collection:
+  title: 'Open farm data store list'
+  route_name: entity.open_farm_data_store.collection
+  description: 'List Open farm data store entities'
+  parent: open_farm.main_menu
+  weight: 200
+
+open_farm_data_store.admin.structure.settings:
+  title: 'Open farm data store settings'
+  description: 'Configure Open farm data store entities'
+  route_name: open_farm_data_store.settings
+  parent: open_farm.main_menu
+
+#Reports menu
+open_farm.reports_menu:
+  title: Farm Reports
+  description: 'Farm Reports'
+  route_name: 'open_farm.reports_menu'
+  weight: -10
+  parent: 'system.admin'
+
+open_farm.report_table:
+  title: 'Simple Reports'
+  route_name: open_farm.open_farm_collected_data_form
+  parent: open_farm.reports_menu
+  weight: 100

@@ -1,0 +1,156 @@
+<?php
+use \Drupal\open_farm\configurations\DefaultConfiguration;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Core\Entity\EntityStorageException;
+use \Drupal\open_farm\Entity\OpenFarmDataStore;
+
+/**
+ * implements hook_schema
+ */
+function open_farm_schema(){
+    //print_r('creating tables');die();
+    $schema['open_farm_data_value'] = array(
+        'description' => 'Stores farm data values',
+        'fields' => array(
+            'id' => array(
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'description' => 'Unique ID for each data value',
+            ),
+            'animal_tag' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Unique Tag for each animal",
+            ),
+            'data_element' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Item (milk, eggs) for which data is collected.",
+            ),
+            'period' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Period of day when data value was collected. Takes on values morning or afternoon.",
+            ),
+            'collection_date' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Date data element was collected.",
+            ),
+            'amount' => array(
+                'type' => 'int',
+                'not null' => TRUE,
+                'default' => 0,
+                'description' => "Count of Item (milk, eggs) is collected for each animal per period.",
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+
+    return $schema;
+}
+/**
+ * Implements hook_install.
+ */
+function open_farm_install()
+{
+    $vocabularies = array(
+        'periods' => DefaultConfiguration::getPeriods(),
+        'gender' => DefaultConfiguration::getGender(),
+        'animal_type' => DefaultConfiguration::getAnimalType()
+    );
+
+    foreach ($vocabularies as $vid => $items){
+        createTaxonomyTerm($vid, $items);
+    }
+    createDefaultDatastore();
+}
+/**
+ * Implements hook_uninstall.
+ */
+function open_farm_uninstall()
+{
+    print('Starting uninstall process');
+    $vids = array(
+        'periods', 'gender', 'animal_type'
+    );
+    foreach ($vids as $vid){
+        deleteTerms($vid);
+    }
+    $entity_settings = array(
+        'taxonomy.vocabulary.periods',
+        'taxonomy.vocabulary.gender',
+        'taxonomy.vocabulary.animal_type',
+        'field.field.node.milking_data.amount',
+        'field.field.node.milking_data.animal',
+        'field.field.node.milking_data.period',
+        'field.field.node.milking_data.collection_date',
+        'field.storage.node.amount', 'field.storage.node.period', 'field.storage.node.collection_date'
+    );
+
+    foreach ($entity_settings as $entity_setting) {
+        \Drupal::configFactory()->getEditable($entity_setting)->delete();
+    }
+}
+function deleteTerms($vid){
+    $tids = \Drupal::entityQuery('taxonomy_term')
+        ->condition('vid', $vid)
+        ->execute();
+
+    try{
+        $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+        $entities = $storage->loadMultiple($tids);
+        $storage->delete($entities);
+    }
+    catch(PluginNotFoundException $pluginNotFoundException){
+        print_r($pluginNotFoundException->getMessage());
+    }
+    catch (InvalidPluginDefinitionException $invalidPluginDefinitionException){
+        print_r($invalidPluginDefinitionException->getMessage());
+    }
+    catch (EntityStorageException $entityStorageException){
+        print_r($entityStorageException->getMessage());
+    }
+}
+function createTaxonomyTerm($vid, $taxonomyTerms){
+    $pathAliasStorage = \Drupal::service('path.alias_storage');
+    foreach ($taxonomyTerms as $taxonomyTerm) {
+        $term = Term::create([
+            'name' => $taxonomyTerm,
+            'vid' => $vid,
+            'description' => $taxonomyTerm
+        ]);
+        try{
+            $term->save();
+            $pathAliasStorage->save('/taxonomy/term/'.$term->id(), '/open_farm/'.$taxonomyTerm);
+        }
+        catch (EntityStorageException $entityStorageException){
+            print_r($entityStorageException->getMessage());
+        }
+    }
+}
+function createDefaultDatastore(){
+    $defaultStore = OpenFarmDataStore::create([
+        'name' => 'Default Store',
+        'status' => 1,
+        'user_id' => ['target_id' => \Drupal::currentUser()->id()]
+    ]);
+    try{
+        $defaultStore->save();
+    }
+    catch(EntityStorageException $entityStorageException){
+        print_r($entityStorageException->getMessage());
+    }
+
+}

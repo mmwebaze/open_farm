@@ -1,0 +1,5 @@
+open_farm.visualization:
+  title: 'Visualizer'
+  route_name: open_farm_analytics.visualizer_form
+  parent: open_farm.reports_menu
+  weight: 100

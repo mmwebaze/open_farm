@@ -1,0 +1,14 @@
+{
+  "name": "drupal/open_farm",
+  "type": "drupal-module",
+  "description": "Manages records of animal farms",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/open_farm",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/open_farm",
+    "source": "http://cgit.drupalcode.org/open_farm"
+  },
+  "require": { }
+}

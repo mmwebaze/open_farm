@@ -1,0 +1,38 @@
+add animal entities:
+  title: 'Create new Animal entities'
+
+administer animal entities:
+  title: 'Administer Animal entities'
+  description: 'Allow to access the administration form to configure Animal entities.'
+  restrict access: true
+
+delete animal entities:
+  title: 'Delete Animal entities'
+
+edit animal entities:
+  title: 'Edit Animal entities'
+
+view published animal entities:
+  title: 'View published Animal entities'
+
+view unpublished animal entities:
+  title: 'View unpublished Animal entities'
+add open farm data store entities:
+  title: 'Create new Open farm data store entities'
+
+administer open farm data store entities:
+  title: 'Administer Open farm data store entities'
+  description: 'Allow to access the administration form to configure Open farm data store entities.'
+  restrict access: true
+
+delete open farm data store entities:
+  title: 'Delete Open farm data store entities'
+
+edit open farm data store entities:
+  title: 'Edit Open farm data store entities'
+
+view published open farm data store entities:
+  title: 'View published Open farm data store entities'
+
+view unpublished open farm data store entities:
+  title: 'View unpublished Open farm data store entities'

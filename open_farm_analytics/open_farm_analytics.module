@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains open_farm_analytics.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function open_farm_analytics_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the open_farm_analytics module.
+    case 'help.page.open_farm_analytics':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('My Awesome Module') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function open_farm_analytics_theme() {
+  return [
+    'open_farm_analytics' => [
+      'render element' => 'children',
+    ],
+  ];
+}

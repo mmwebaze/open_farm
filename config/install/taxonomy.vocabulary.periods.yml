@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - open_farm
+name: Milking Periods
+vid: periods
+description: 'Use milking periods to group amount by period.'
+hierarchy: 0
+weight: 0

@@ -1,0 +1,5 @@
+name: 'open_farm'
+type: module
+description: 'Manages records of animal farms'
+core: 8.x
+package: 'farm'

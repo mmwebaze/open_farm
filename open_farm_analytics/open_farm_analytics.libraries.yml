@@ -1,0 +1,36 @@
+d3:
+  remote: 'https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.js'
+  version: 4.9.1
+  license:
+    name: BSD
+    url: 'https://en.wikipedia.org/wiki/BSD_licenses'
+    gpl-compatible: false
+  js:
+    js/libraries/d3/d3.js: { }
+
+billboard:
+  remote: 'https://naver.github.io/billboard.js/release/latest/dist/billboard.min.js'
+  version: 0.4.18
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+    gpl-compatible: true
+  js:
+    js/libraries/billboard/billboard.min.js: {}
+  css:
+    theme:
+      css/libraries/billboard/billboard.min.css: { }
+  dependencies:
+    - open_farm_analytics/d3
+
+visualizer:
+  js:
+    js/open_farm_analytics_visualizer.js: {}
+  css:
+    theme:
+      css/open_farm_analytics_visualizer.css: {}
+  dependencies:
+  - core/jquery
+  - core/jquery.once
+  - core/drupal
+  - open_farm_analytics/billboard

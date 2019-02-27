@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - open_farm
+name: Animal Gender
+vid: gender
+description: 'Groups Animals by gender.'
+hierarchy: 0
+weight: 0

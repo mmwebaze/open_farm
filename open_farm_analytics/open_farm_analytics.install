@@ -1,0 +1,48 @@
+<?php
+/**
+ * implements hook_schema
+ */
+/*function open_farm_analytics_schema(){
+    //print_r('creating tables');die();
+    $schema['open_farm_analytics_data_value'] = array(
+        'description' => 'Stores farm data values',
+        'fields' => array(
+            'id' => array(
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'description' => 'Unique ID for each data value',
+            ),
+            'animal_tag' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Unique Tag for each animal",
+            ),
+            'period' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Period of day when data value was collected. Takes on values morning or afternoon.",
+            ),
+            'data_element' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Item (milk, eggs) for which data is collected.",
+            ),
+            'amount' => array(
+                'type' => 'int',
+                'not null' => TRUE,
+                'default' => 0,
+                'description' => "Count of Item (milk, eggs) is collected for each animal per period.",
+            ),
+        ),
+        'primary key' => array('id'),
+    );
+
+    return $schema;
+}*/

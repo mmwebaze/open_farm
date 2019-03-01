@@ -10,5 +10,7 @@
     "issues": "https://www.drupal.org/project/issues/open_farm_analytics",
     "source": "http://cgit.drupalcode.org/open_farm_analytics"
   },
-  "require": { }
+  "require": {
+    "ext-json": "*"
+  }
 }

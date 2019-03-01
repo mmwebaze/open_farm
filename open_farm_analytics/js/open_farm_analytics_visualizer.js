@@ -2,22 +2,22 @@
  * @file
  * JavaScript integration between Billboard and Drupal.
  */
-(function ($) {
+(function ($, Drupal, drupalSettings) {
     'use strict';
 
     Drupal.behaviors.open_farm_analytics_visualizer = {
         attach: function (context, settings) {
+            $("#edit-visualize").once().click(function () {
+                //var d = drupalSettings.open_farm_analytics.chart_data.d;
+                //console.log(d);
+                var data = $('#chart').attr('data-chart');
 
-            var chart = bb.generate({
-                bindto: "#chart",
-                data: {
-                    type: "bar",
-                    columns: [
-                        ["data1", 30, 200, 100, 170, 150, 250],
-                        ["data2", 130, 100, 140, 35, 110, 50]
-                    ]
-                }
+
+                var chart = bb.generate({
+                    bindto: "#chart",
+                    data: JSON.parse(data)
+                });
             });
         }
     };
-}(jQuery));
+}(jQuery, Drupal, drupalSettings));

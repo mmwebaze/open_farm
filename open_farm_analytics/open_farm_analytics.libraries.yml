@@ -30,7 +30,8 @@ visualizer:
     theme:
       css/open_farm_analytics_visualizer.css: {}
   dependencies:
-  - core/jquery
-  - core/jquery.once
-  - core/drupal
-  - open_farm_analytics/billboard
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+    - open_farm_analytics/billboard

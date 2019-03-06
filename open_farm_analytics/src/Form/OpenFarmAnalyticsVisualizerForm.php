@@ -75,7 +75,7 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
             '#title' => $this->t(''),
         );
         $form['visualizer']['display'] = array(
-            '#markup' => '<div id="chart" data-chart="9809090"></div>'
+            '#markup' => '<div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>'
         );
         $form['#attached']['library'][] = 'open_farm_analytics/visualizer';
         //$form['#attached']['drupalSettings']['open_farm_analytics']['chart_data']['d'] = $this->d;
@@ -89,12 +89,6 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
     public function generateVisualization(array &$form, FormStateInterface $form_state) {
         $response = new AjaxResponse();
         $response->addCommand(new HtmlCommand('.result_message', 'update please'));
-
-
-        return $response;
-    }
-    public function getData(array &$form, FormStateInterface $form_state){
-        $response = new AjaxResponse();
         $data = new Data();
         $data->setChartType('bar');
         $data->addColumns(['1234', 12, 30, 40]);
@@ -102,6 +96,18 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
         $response->addCommand(
             new InvokeCommand('#chart', 'attr', array('data-chart', $data_str))
         );
+
+        return $response;
+    }
+    public function getData(array &$form, FormStateInterface $form_state){
+        $response = new AjaxResponse();
+        /*$data = new Data();
+        $data->setChartType('bar');
+        $data->addColumns(['1234', 12, 30, 40]);
+        $data_str = json_encode($data);
+        $response->addCommand(
+            new InvokeCommand('#chart', 'attr', array('data-chart', $data_str))
+        );*/
 
         //$form['#attached']['drupalSettings']['open_farm_analytics']['chart_data']['d'] = 'BBC_AND_CNN';
         return $response;

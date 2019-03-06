@@ -1,3 +1,18 @@
+highcharts:
+  remote: 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js'
+  version: 2.73
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+    gpl-compatible: true
+  js:
+    js/libraries/highcharts/highcharts.js: {}
+    #js/libraries/highcharts/highcharts-more.js: {}
+    js/libraries/highcharts/exporting.js: {}
+    js/libraries/highcharts/export-data.js: {}
+    #js/libraries/highcharts_accessibility/accessibility.js: {}
+    #js/libraries/highcharts_3d/highcharts-3d.js: {}
+
 d3:
   remote: 'https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.js'
   version: 4.9.1
@@ -34,4 +49,5 @@ visualizer:
     - core/jquery.once
     - core/drupal
     - core/drupalSettings
-    - open_farm_analytics/billboard
+    #- open_farm_analytics/billboard
+    - open_farm_analytics/highcharts

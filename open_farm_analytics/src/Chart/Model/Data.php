@@ -5,20 +5,20 @@ namespace Drupal\open_farm_analytics\Chart\Model;
 
 class Data implements \JsonSerializable
 {
-    private $type;
-    private $columns = array();
+    private $name;
+    private $data = array();
 
-    public function setChartType($type){
-        $this->type = $type;
+    public function setName($name){
+        $this->name = $name;
     }
-    public function getChartType(){
-        return $this->type;
+    public function getName(){
+        return $this->name;
     }
-    public function addColumns($column = array()){
-        array_push($this->columns, $column);
+    public function setData($data = array()){
+        $this->data = $data;
     }
-    public function getColumns(){
-        return $this->columns;
+    public function getData(){
+        return $this->data;
     }
     public function jsonSerialize() {
         $vars = get_object_vars($this);

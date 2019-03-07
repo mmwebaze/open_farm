@@ -3,107 +3,119 @@
 namespace Drupal\open_farm_analytics\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\open_farm\Plugin\Period\PeriodManager;
 use Drupal\open_farm_analytics\Chart\Model\Data;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\open_farm_analytics\Service\OpenFarmAnalyticsInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Drupal\Component\Plugin\Exception\PluginException;
+
 
 /**
  * Class OpenFarmAnalyticsController.
  */
-class OpenFarmAnalyticsController extends ControllerBase {
+class OpenFarmAnalyticsController extends ControllerBase
+{
 
-  /**
-   * Drupal\open_farm_analytics\Service\OpenFarmAnalyticsInterface definition.
-   *
-   * @var \Drupal\open_farm_analytics\Service\OpenFarmAnalyticsInterface
-   */
-  protected $openFarmAnalyticsManagerService;
+    /**
+     * Drupal\open_farm_analytics\Service\OpenFarmAnalyticsInterface definition.
+     *
+     * @var \Drupal\open_farm_analytics\Service\OpenFarmAnalyticsInterface
+     */
+    protected $openFarmAnalyticsManagerService;
+    protected $periodManager;
 
-  /**
-   * Constructs a new OpenFarmAnalyticsController object.
-   */
-  public function __construct(OpenFarmAnalyticsInterface $openFarmAnalyticsManagerService) {
-    $this->openFarmAnalyticsManagerService = $openFarmAnalyticsManagerService;
-  }
+    /**
+     * Constructs a new OpenFarmAnalyticsController object.
+     */
+    public function __construct(OpenFarmAnalyticsInterface $openFarmAnalyticsManagerService, PeriodManager $periodManager)
+    {
+        $this->openFarmAnalyticsManagerService = $openFarmAnalyticsManagerService;
+        $this->periodManager = $periodManager;
+    }
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('open_farm_analytics.manager_service')
-    );
-  }
+    /**
+     * {@inheritdoc}
+     */
+    public static function create(ContainerInterface $container)
+    {
+        return new static(
+            $container->get('open_farm_analytics.manager_service'),
+            $container->get('plugin.manager.periods')
+        );
+    }
 
-  /**
-   * Data Value.
-   *
-   * @return string
-   *   Return Hello string.
-   */
-  public function getDataValue(Request $request) {
-      $response = ['none'];
+    /**
+     * Data Value.
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     *   Return  $response
+     */
+    public function getDataValue(Request $request)
+    {
+        $response = ['none'];
 
-     /* if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
-          $response = [];
-          $dataElement = $request->query->get('de');
-          $period = $request->query->get('pe');
-          $animalTags = $request->query->get('tags');
-          //$response['de'] = $dataElement.' ***';
-          //$response['pe'] = $period;
-          //$response['tags'] = $animalTags;
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+             $dataElement = $request->query->get('de');
+             $period = $request->query->get('pe');
+             $animalTags = $request->query->get('tags');
+             $chartTitle = $request->query->get('title');
+             /*$test = new \stdClass();
+             $test->period = $period;
+             $test->tags = $animalTags;
+             $test->title = $chartTitle;
+             $test->dataElement = $dataElement;*/
 
-          $values['de'] =  'Milk';
-          $periods = ["2019-02-27", "2019-02-25"];
-          $animalTags = ["1234", "12345"];
-          $response['categories'] = ["2019-02-25", "2019-02-27"];
-          $response['datavalues'] = $this->openFarmAnalyticsManagerService->getDataValues('Milk', $periods, $animalTags);
-          return new JsonResponse( $response );
-      }*/
-      $values['de'] =  'Milk';
-      $periods = ["2019-02-25", "2019-02-27"];
-      $animalTags = ["1234", "12345"];
+             try{
+                 $periodInstance = $this->periodManager->createInstance($period);
+                 $periods = $periodInstance->period();
+                 //return new JsonResponse($test);
+             }
+             catch (PluginException $e){
+                 return new JsonResponse( $e->getMessage() );
+             }
 
-      foreach ($animalTags as $animalTag){
-          $data[$animalTag] = [$animalTag];
-      }
+            foreach ($animalTags as $animalTag) {
+                $data[$animalTag] = [$animalTag];
+            }
 
-      $categories = ["2019-02-25", "2019-02-27"];
-      $response = $this->openFarmAnalyticsManagerService->getDataValues('Milk', $periods, $animalTags);
+            $dataValues = $this->openFarmAnalyticsManagerService->getDataValues($dataElement, $periods, $animalTags);
 
+            $series = [];
+            $periods = array_values($periods['params']);
 
-      $series = [];
-      foreach ($animalTags as $k => $animalTag){
-          $chartData = new Data();
-          $chartData->setName($animalTag);
+            foreach ($animalTags as $k => $animalTag) {
+                $chartData = new Data();
+                $chartData->setName($animalTag);
 
-          foreach ($categories as $key => $category){
-              $count = 0;
-              foreach ($response as  $value ){
-                  if ($animalTag == $value->animal_tag){
-                      if($category == $value->collection_date){
-                          $data = $chartData->getData();
-                          array_push($data, (int) $value->Amount);
-                          $chartData->setData($data);
-                          $count++;
-                      }
-                  }
+                foreach ($periods as $period) {
+                    $count = 0;
+                    foreach ($dataValues as $value) {
+                        if ($animalTag == $value->animal_tag) {
+                            if ($period == $value->category) {
+                                $data = $chartData->getData();
+                                array_push($data, (int)$value->Amount);
+                                $chartData->setData($data);
+                                $count++;
+                            }
+                        }
+                    }
+                    if ($count == 0) {
+                        $data = $chartData->getData();
+                        array_push($data, 0);
+                        $chartData->setData($data);
+                    }
+                }
+                array_push($series, $chartData);
+            }
+            $chart = new \stdClass();
+            $chart->series = $series;
+            $chart->categories = $periods;
+            $chart->title = $chartTitle;
+            return new JsonResponse( $chart );
+         }
 
-              }
-              if($count == 0){
-                  $data = $chartData->getData();
-                  array_push($data, 0);
-                  $chartData->setData($data);
-              }
-          }
-
-          array_push($series, $chartData);
-      }
-      $chart = new \stdClass();
-      $chart->series = $series;
-      return new JsonResponse( $chart);
-  }
-
+        return new JsonResponse($response);
+    }
 }

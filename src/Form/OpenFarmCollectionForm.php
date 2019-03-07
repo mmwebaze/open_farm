@@ -54,7 +54,7 @@ class OpenFarmCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-      $date = new \Drupal\Core\Datetime\DrupalDateTime();
+      $date = new DrupalDateTime();
 
       $needle = 'morning';
       if ($date->format('H') > "12"){

@@ -18,7 +18,7 @@ namespace Drupal\open_farm\Plugin\Period;
  */
 class Morning extends AbstractPeriod
 {
-    public function period($period)
+    public function period()
     {
 
     }

@@ -12,7 +12,7 @@ namespace Drupal\open_farm\Plugin\Period;
  */
 class Afternoon extends AbstractPeriod
 {
-    public function period($period){
+    public function period(){
 
     }
 }

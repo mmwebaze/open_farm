@@ -48,6 +48,11 @@ function open_farm_schema(){
                 'default' => '',
                 'description' => "Date data element was collected.",
             ),
+            'date_collected' => array(
+                'mysql_type' => 'date',
+                'description' => t('The date item was collected.'),
+                'not null' => FALSE,
+            ),
             'amount' => array(
                 'type' => 'int',
                 'not null' => TRUE,
@@ -153,4 +158,22 @@ function createDefaultDatastore(){
         print_r($entityStorageException->getMessage());
     }
 
+}
+function open_farm_update_8101(){
+    $datum = array(
+        'mysql_type' => 'date',
+        'description' => t('The date item was collected.'),
+        'not null' => FALSE,
+    );
+    $schema = \Drupal\Core\Database\Database::getConnection()->schema();
+    $schema->addField('open_farm_data_value', 'date_collected', $datum);
+}
+function open_farm_update_8102(){
+    $datum = array(
+        'mysql_type' => 'date',
+        'description' => t('The date item was collected.'),
+        'not null' => FALSE,
+    );
+    $schema = \Drupal\Core\Database\Database::getConnection()->schema();
+    $schema->addField('open_farm_data_value', 'date_collected', $datum);
 }

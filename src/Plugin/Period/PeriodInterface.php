@@ -9,7 +9,7 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
  */
 interface PeriodInterface extends PluginInspectionInterface
 {
-    public function period($period);
+    public function period();
     /**
      * Return the machine name of the period.
      *

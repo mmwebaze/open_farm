@@ -9,8 +9,12 @@
         attach: function (context, settings) {
             $("#edit-visualize").once().click(function () {
 
-                //generateChart();
-                //highchart()
+                var tags = null; //Animal tags
+                //get multi select values. For single tag use $('#edit-src').find(":selected").val()
+                $('#edit-src').each(function () {
+                    tags = $(this).val();
+                });
+
                 $.ajax({
                     url: "/open_farm/api/datavalue",
                     contentType: "application/json",
@@ -18,12 +22,12 @@
                     data: {
                         de: $('#edit-de').find(":selected").val(),
                         pe: $('#edit-pe').find(":selected").val(),
-                        tags: $('#edit-src').find(":selected").val()
+                        tags: tags,
+                        title: $( "#edit-pe option:selected" ).text()
                     },
                     success: function (response) {
-                        console.log(response.series);
-                        //console.log(JSON.stringify(response));
-                        highchart(response.series);
+                        console.log(response);
+                        generateChart(response);
                     },
                     error: function (errorResponse) {
                         console.log(errorResponse);
@@ -31,22 +35,17 @@
                 });
 
             });
-            function generateChart() {
 
-            }
-            function highchart(data) {
+            function generateChart(data) {
                 Highcharts.chart('chart', {
                     chart: {
                         type: 'column'
                     },
                     title: {
-                        text: 'Monthly Average Rainfall'
+                        text: data.title
                     },
                     xAxis: {
-                        categories: [
-                            'Jan',
-                            'Feb'
-                        ],
+                        categories: data.categories,
                         crosshair: true
                     },
                     yAxis: {
@@ -69,7 +68,7 @@
                             borderWidth: 0
                         }
                     },
-                    series: data
+                    series: data.series
                 });
             }
         }

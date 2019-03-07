@@ -17,13 +17,17 @@ class OpenFarmServiceManager implements OpenFarmServiceInterface
         $this->entityTypeManager = $entityTypeManager;
     }
 
-    public function getTaxonomyTerms($vid)
+    public function getTaxonomyTerms($vid, $termName = NULL)
     {
         $taxonomyTerms = array();
         try{
             $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-            $tids = $storage->getQuery()->condition('vid', $vid)->execute();
+            $query = $storage->getQuery()->condition('vid', $vid);
 
+            if(isset($termName)){
+                $query = $storage->getQuery()->condition('name', $termName);
+            }
+            $tids = $query->execute();
             $terms = $storage->loadMultiple($tids);
 
             foreach ($terms as $term){
@@ -55,6 +59,29 @@ class OpenFarmServiceManager implements OpenFarmServiceInterface
         }
         return 0;
     }
+    public function getAnimals(array $options = [])
+    {
+        try{
+            $storage = $this->entityTypeManager->getStorage('animal');
+            $query = $storage->getQuery();
+
+            foreach ($options as $field => $option){
+                $query->condition($field, $option);
+            }
+            $animalIds = $query->execute();
+            $animals = $storage->loadMultiple($animalIds);
+
+            return $animals;
+        }
+        catch (PluginNotFoundException $pluginNotFoundException){
+            print_r($pluginNotFoundException->getMessage());
+        }
+        catch (InvalidPluginDefinitionException $invalidPluginDefinitionException){
+            print_r($invalidPluginDefinitionException->getMessage());
+        }
+        return 0;
+    }
+
     public function getAnimalByName($animalName){
 
     }

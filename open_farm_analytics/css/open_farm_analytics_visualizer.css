@@ -1,3 +1,8 @@
-.viz_display{
-    background-color: orangered;
+.flex-container .fieldset-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+.flex-container .fieldset-wrapper .data_element{
+    margin: 10px;
+    padding: 20px;
 }

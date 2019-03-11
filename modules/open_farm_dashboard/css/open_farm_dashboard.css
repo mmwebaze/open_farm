@@ -1,0 +1,5 @@
+.dashboard-container{
+    background-color: orange;
+    display: flex;
+    flex-direction: column;
+}

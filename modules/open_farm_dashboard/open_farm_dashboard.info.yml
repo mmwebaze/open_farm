@@ -1,0 +1,7 @@
+name: 'open_farm_dashboard'
+type: module
+description: 'Displays Open Farm visualizations and other important information.'
+core: 8.x
+package: 'farm'
+dependencies:
+  - open_farm_analytics:open_farm_analytics

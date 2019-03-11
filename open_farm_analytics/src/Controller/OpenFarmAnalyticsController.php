@@ -67,55 +67,104 @@ class OpenFarmAnalyticsController extends ControllerBase
              $test->title = $chartTitle;
              $test->dataElement = $dataElement;*/
 
-             try{
-                 $periodInstance = $this->periodManager->createInstance($period);
-                 $periods = $periodInstance->period();
-                 //return new JsonResponse($test);
-             }
-             catch (PluginException $e){
-                 return new JsonResponse( $e->getMessage() );
-             }
+             $chart = $this->createChartData($dataElement, $period, $animalTags, $chartTitle);
 
-            foreach ($animalTags as $animalTag) {
-                $data[$animalTag] = [$animalTag];
-            }
-
-            $dataValues = $this->openFarmAnalyticsManagerService->getDataValues($dataElement, $periods, $animalTags);
-
-            $series = [];
-            $periods = array_values($periods['params']);
-
-            foreach ($animalTags as $k => $animalTag) {
-                $chartData = new Data();
-                $chartData->setName($animalTag);
-
-                foreach ($periods as $period) {
-                    $count = 0;
-                    foreach ($dataValues as $value) {
-                        if ($animalTag == $value->animal_tag) {
-                            if ($period == $value->category) {
-                                $data = $chartData->getData();
-                                array_push($data, (int)$value->Amount);
-                                $chartData->setData($data);
-                                $count++;
-                            }
-                        }
-                    }
-                    if ($count == 0) {
-                        $data = $chartData->getData();
-                        array_push($data, 0);
-                        $chartData->setData($data);
-                    }
-                }
-                array_push($series, $chartData);
-            }
-            $chart = new \stdClass();
-            $chart->series = $series;
-            $chart->categories = $periods;
-            $chart->title = $chartTitle;
             return new JsonResponse( $chart );
          }
 
         return new JsonResponse($response);
+    }
+    public function saveVisualization(Request $request){
+        /*
+         * if ( 0 === strpos( $request->headers->get( 'Content-Type' ), 'application/json' ) ) {
+      $data = json_decode( $request->getContent(), TRUE );
+      $request->request->replace( is_array( $data ) ? $data : [] );
+    }
+
+    $response['data'] = 'Some test data to return';
+    $response['method'] = 'POST';
+
+    return new JsonResponse( $response );
+         */
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+            $data = json_decode($request->getContent(), TRUE );
+            //$request->request->replace(is_array($data) ? $data : array());
+            //\Drupal::logger('open_farm_analytics')->notice($data);
+            $dataElement = $request->query->get('de');
+            $period = $request->query->get('pe');
+            $animalTags = $request->query->get('tags');
+            $chartTitle = $request->query->get('title');
+            //\Drupal::logger('open_farm_analytics')->notice($chartTitle);
+            //die();
+            //$status = $this->createChartData($dataElement, $period, implode(',', $animalTags), $chartTitle, TRUE);
+
+            return new JsonResponse(json_encode($data), 200);
+        }
+        \Drupal::logger('open_farm_analytics')->notice('some errors generated');
+
+        return new JsonResponse("Errors adding visualization");
+    }
+    private function createChartData($dataElement, $period, $animalTags, $chartTitle, $saved = FALSE){
+
+        if ($saved){
+            return $animalTags;
+            $this->openFarmAnalyticsManagerService->saveChartConfig([
+                'uuid' => '',
+                'chart_title' => $chartTitle,
+                'chart_period' => $period,
+                'data_element' => $dataElement,
+                'animal_tags' => $animalTags
+            ]);
+            return "Chart has been saved.";
+        }
+        return 'sfks';
+        try{
+            $periodInstance = $this->periodManager->createInstance($period);
+            $periods = $periodInstance->period();
+            //return new JsonResponse($test);
+        }
+        catch (PluginException $e){
+            return new JsonResponse( $e->getMessage() );
+        }
+
+        foreach ($animalTags as $animalTag) {
+            $data[$animalTag] = [$animalTag];
+        }
+
+        $dataValues = $this->openFarmAnalyticsManagerService->getDataValues($dataElement, $periods, $animalTags);
+
+        $series = [];
+        $periods = array_values($periods['params']);
+
+        foreach ($animalTags as $k => $animalTag) {
+            $chartData = new Data();
+            $chartData->setName($animalTag);
+
+            foreach ($periods as $period) {
+                $count = 0;
+                foreach ($dataValues as $value) {
+                    if ($animalTag == $value->animal_tag) {
+                        if ($period == $value->category) {
+                            $data = $chartData->getData();
+                            array_push($data, (int)$value->Amount);
+                            $chartData->setData($data);
+                            $count++;
+                        }
+                    }
+                }
+                if ($count == 0) {
+                    $data = $chartData->getData();
+                    array_push($data, 0);
+                    $chartData->setData($data);
+                }
+            }
+            array_push($series, $chartData);
+        }
+        $chart = new \stdClass();
+        $chart->series = $series;
+        $chart->categories = $periods;
+        $chart->title = $chartTitle;
+
+        return $chart;
     }
 }

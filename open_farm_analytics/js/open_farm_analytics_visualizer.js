@@ -35,6 +35,38 @@
                 });
 
             });
+            $('#edit-save-visual').once().click(function () {
+                console.log('Saving this now');
+                var tags = null; //Animal tags
+                //get multi select values. For single tag use $('#edit-src').find(":selected").val()
+                $('#edit-src').each(function () {
+                    tags = $(this).val();
+                });
+                console.log(tags);
+                /*var url = "/open_farm/api/visualization/save";
+                var de = $('#edit-de').find(":selected").val();
+                var pe = $('#edit-pe').find(":selected").val();
+                var title = $( "#edit-pe option:selected" ).text();*/
+
+                $.ajax({
+                    url: "/open_farm/api/visualization/save",
+                    //dataType: 'json',
+                    type: "post",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        de: $('#edit-de').find(":selected").val(),
+                        pe: $('#edit-pe').find(":selected").val(),
+                       // tags: tags,
+                        title: $( "#edit-pe option:selected" ).text()
+                    }),
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (errorResponse) {
+                        console.log(errorResponse);
+                    }
+                });
+            });
 
             function generateChart(data) {
                 Highcharts.chart('chart', {
@@ -70,6 +102,9 @@
                     },
                     series: data.series
                 });
+            }
+            function f() {
+
             }
         }
     };

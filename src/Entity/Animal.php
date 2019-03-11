@@ -282,7 +282,7 @@ class Animal extends ContentEntityBase implements AnimalInterface {
           ->setRequired(TRUE);
 
       $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Publishing status'))
+      ->setLabel(t('Stock status'))
       ->setDescription(t('A boolean indicating whether the Animal is available.'))
       ->setDefaultValue(TRUE)
       ->setDisplayOptions('form', [
@@ -291,7 +291,7 @@ class Animal extends ContentEntityBase implements AnimalInterface {
       ]);
 
       $fields['active'] = BaseFieldDefinition::create('boolean')
-          ->setLabel(t('Production status'))
+          ->setLabel(t('Productivity status'))
           ->setDescription(t('A boolean indicating whether the Animal produces milk, eggs e.t.c.'))
           ->setDefaultValue(TRUE)
           ->setDisplayOptions('form', [

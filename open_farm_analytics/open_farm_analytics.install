@@ -2,10 +2,10 @@
 /**
  * implements hook_schema
  */
-/*function open_farm_analytics_schema(){
+function open_farm_analytics_schema(){
     //print_r('creating tables');die();
-    $schema['open_farm_analytics_data_value'] = array(
-        'description' => 'Stores farm data values',
+    $schema['open_farm_analytics_stored_charts'] = array(
+        'description' => 'Stores saved chart configurations',
         'fields' => array(
             'id' => array(
                 'type' => 'serial',
@@ -13,36 +13,44 @@
                 'not null' => TRUE,
                 'description' => 'Unique ID for each data value',
             ),
-            'animal_tag' => array(
+            'uuid' => array(
                 'type' => 'varchar',
                 'length' => 255,
-                'not null' => TRUE,
                 'default' => '',
-                'description' => "Unique Tag for each animal",
+                'not null' => TRUE,
+                'description' => 'Universally Unique ID for each chart configuration.',
             ),
-            'period' => array(
+            'chart_title' => array(
+                'type' => 'text',
+                //'length' => 255,
+                'not null' => TRUE,
+                //'default' => '',
+                'description' => "Chart title.",
+            ),
+            'chart_period' => array(
                 'type' => 'varchar',
                 'length' => 255,
                 'not null' => TRUE,
                 'default' => '',
-                'description' => "Period of day when data value was collected. Takes on values morning or afternoon.",
+                'description' => "Visualization period.",
             ),
             'data_element' => array(
                 'type' => 'varchar',
                 'length' => 255,
                 'not null' => TRUE,
                 'default' => '',
-                'description' => "Item (milk, eggs) for which data is collected.",
+                'description' => "The data element (milk, eggs) associated with this chart configuration.",
             ),
-            'amount' => array(
-                'type' => 'int',
+            'animal_tags' => array(
+                'type' => 'text',
+                //'length' => 255,
                 'not null' => TRUE,
-                'default' => 0,
-                'description' => "Count of Item (milk, eggs) is collected for each animal per period.",
-            ),
+                //'default' => '',
+                'description' => "Animal identifiers being visualized.",
+            )
         ),
         'primary key' => array('id'),
     );
 
     return $schema;
-}*/
+}

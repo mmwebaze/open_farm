@@ -1,0 +1,12 @@
+dashboard:
+  js:
+    js/open_farm_dashboard.js: {}
+  css:
+    theme:
+      css/open_farm_dashboard.css: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+    - open_farm_analytics/highcharts

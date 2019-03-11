@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Contains open_farm.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function open_farm_dashboard_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+        // Main module help for the open_farm_dashboard module.
+        case 'help.page.open_farm_dashboard':
+            $output = '';
+            $output .= '<h3>' . t('About') . '</h3>';
+            $output .= '<p>' . t('Displays Open Farm visualizations and other important information.') . '</p>';
+            return $output;
+
+        default:
+    }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function open_farm_dashboard_theme($existing, $type, $theme, $path) {
+    return [
+        'open_farm_dashboard' => [
+            'template' => 'open_farm_dashboard',
+            'variables' => array('viz_data' => NULL),
+        ],
+    ];
+}

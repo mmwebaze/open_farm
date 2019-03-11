@@ -1,4 +1,3 @@
-
 open_farm_analytics.open_farm_analytics_management_form:
   path: '/open_farm/analytics/management'
   defaults:
@@ -19,5 +18,13 @@ open_farm_analytics.datavalue:
     _controller: '\Drupal\open_farm_analytics\Controller\OpenFarmAnalyticsController::getDataValue'
     #_title: 'Get visualization data'
   methods: [GET]
+  requirements:
+    _permission: 'access content'
+
+open_farm_analytics.visualization_save:
+  path: '/open_farm/api/visualization/save'
+  defaults:
+    _controller: '\Drupal\open_farm_analytics\Controller\OpenFarmAnalyticsController::saveVisualization'
+  methods:  [POST]
   requirements:
     _permission: 'access content'

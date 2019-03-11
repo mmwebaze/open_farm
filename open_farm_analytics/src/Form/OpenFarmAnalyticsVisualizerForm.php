@@ -44,11 +44,14 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
 
         }
         $femaleGender = $this->openFarmManagerService->getTaxonomyTerms('gender', 'female');
-
-        $animals = $this->openFarmManagerService->getAnimals(['data_store' => 1, 'animal_gender' => array_search('female', $femaleGender)]);
-
+        if (!empty($femaleGender)){
+            $animals = $this->openFarmManagerService->getAnimals(['data_store' => 1, 'animal_gender' => array_search('female', $femaleGender)]);
+        }
+        $tagId = '';
         foreach ($animals as $key => $animal){
-            $animalTags[$animal->getTagId()] = $animal->getTagId();
+            $tagId = $animal->getTagId();
+            $animalTags[$tagId] = $tagId;
+
         }
 
         $form['dimensions'] = array(
@@ -80,7 +83,7 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
             '#multiple' => TRUE,
             '#title' => $this->t('Animal Tags'),
             '#options' => $animalTags,
-            '#default_value' => '1234',
+            '#default_value' => $tagId,
             '#required' => TRUE,
             '#prefix' => '<div class="data_element">',
             '#suffix' => '</div>',
@@ -91,6 +94,18 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
             '#title' => $this->t(''),
             '#prefix' => '<div class="buttons_pane">',
             '#suffix' => '</div>',
+        );
+        $form['buttons_pane']['save_visual'] = array(
+            '#type' => 'button',
+            '#value' => $this->t('Save this for later'),
+            '#ajax' => array(
+                'callback' => '::saveVisualization',
+                'event' => 'click',
+                'progress' => array(
+                    'type' => 'throbber',
+                    'message' => $this->t('Saving...'),
+                ),
+            ),
         );
         $form['buttons_pane']['visualize'] = array(
             '#type' => 'button',
@@ -128,6 +143,10 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
             new InvokeCommand('#chart', 'attr', array('data-chart', $data_str))
         );*/
 
+        return $response;
+    }
+    public function saveVisualization(){
+        $response = new AjaxResponse();
         return $response;
     }
     public function submitForm(array &$form, FormStateInterface $form_state){

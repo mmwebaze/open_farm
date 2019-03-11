@@ -1,0 +1,6 @@
+open_farm_dashboard.dashboard:
+  path: '/open_farm/dashboard'
+  defaults:
+    _controller: '\Drupal\open_farm_dashboard\Controller\OpenFarmDashboardController::dashboard'
+  requirements:
+    _permission: 'access content'

@@ -5,75 +5,47 @@
         attach: function (context, settings) {
             var positions = drupalSettings.dashlets;
 
+console.log(positions);
+            for(var uuid in positions){
 
-            for(var i = 0; i < positions.length; i++){
-                generateChart(positions[i]);
+                //console.log(JSON.parse(positions[uuid]).series);
+                generateChart(uuid, JSON.parse(positions[uuid]));
                // console.log(positions[i]);
             }
 
-            function generateChart(position){
+            function generateChart(position, data){
                 Highcharts.chart(position, {
-
+                    chart: {
+                        type: 'column'
+                    },
                     title: {
-                        text: 'Solar Employment Growth by Sector, 2010-2016'
+                        text: data.title
                     },
-
-                    subtitle: {
-                        text: 'Source: thesolarfoundation.com'
+                    xAxis: {
+                        categories: data.categories,
+                        crosshair: true
                     },
-
                     yAxis: {
+                        min: 0,
                         title: {
-                            text: 'Number of Employees'
+                            text: 'litres'
                         }
                     },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'middle'
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
                     },
-
                     plotOptions: {
-                        series: {
-                            label: {
-                                connectorAllowed: false
-                            },
-                            pointStart: 2010
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
                         }
                     },
-
-                    series: [{
-                        name: 'Installation',
-                        data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-                    }, {
-                        name: 'Manufacturing',
-                        data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-                    }, {
-                        name: 'Sales & Distribution',
-                        data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-                    }, {
-                        name: 'Project Development',
-                        data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-                    }, {
-                        name: 'Other',
-                        data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-                    }],
-
-                    responsive: {
-                        rules: [{
-                            condition: {
-                                maxWidth: 500
-                            },
-                            chartOptions: {
-                                legend: {
-                                    layout: 'horizontal',
-                                    align: 'center',
-                                    verticalAlign: 'bottom'
-                                }
-                            }
-                        }]
-                    }
-
+                    series: data.series
                 });
             }
 

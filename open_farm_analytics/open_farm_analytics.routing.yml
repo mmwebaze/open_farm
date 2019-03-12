@@ -13,7 +13,7 @@ open_farm_analytics.visualizer_form:
   requirements:
     _permission: 'access administration pages'
 open_farm_analytics.datavalue:
-  path: 'open_farm/api/datavalue'
+  path: '/open_farm/api/datavalue'
   defaults:
     _controller: '\Drupal\open_farm_analytics\Controller\OpenFarmAnalyticsController::getDataValue'
     #_title: 'Get visualization data'

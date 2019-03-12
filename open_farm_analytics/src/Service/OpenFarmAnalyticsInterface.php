@@ -31,10 +31,10 @@ interface OpenFarmAnalyticsInterface
      * uuid => 'universally unique identifier for a specific chart config'
      *
      * @param integer $limit
-     * The number of chart configs that can be retrieved.
+     * The number of chart configs that can be retrieved. The default limit is 6.
      *
      * @return array
      * Returns an array of chart configurations.
      */
-    public function getChartConfigs(array $options, $limit);
+    public function getChartConfigs(array $options, $limit = 6);
 }

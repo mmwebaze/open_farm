@@ -1,8 +1,15 @@
 .flex-container .fieldset-wrapper{
     display: flex;
     flex-direction: row;
+    flex: 1 1 auto
 }
 .flex-container .fieldset-wrapper .data_element{
     margin: 10px;
     padding: 20px;
+}
+.saved_create{
+    flex: auto;
+}
+.stored_charts{
+    flex: 0 0 25em;
 }

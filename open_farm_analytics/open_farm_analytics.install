@@ -42,11 +42,11 @@ function open_farm_analytics_schema(){
                 'description' => "The data element (milk, eggs) associated with this chart configuration.",
             ),
             'animal_tags' => array(
-                'type' => 'text',
+                'type' => 'blob',
                 //'length' => 255,
-                'not null' => TRUE,
-                //'default' => '',
-                'description' => "Animal identifiers being visualized.",
+                'not null' => FALSE,
+                'size' => 'big',
+                'description' => "A collection of animal identifiers being visualized.",
             )
         ),
         'primary key' => array('id'),

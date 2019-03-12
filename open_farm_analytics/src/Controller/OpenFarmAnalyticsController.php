@@ -56,7 +56,25 @@ class OpenFarmAnalyticsController extends ControllerBase
     {
         $response = ['none'];
 
+
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+            //controls saving of visualization.
+            //Change this section to a switch statement.
+            $visualId = $request->query->get('viz_id');
+            if ($visualId != 0){
+                $savedViz = $this->openFarmAnalyticsManagerService->getChartConfigs(['id' => $visualId]);
+                return new JsonResponse( current($savedViz) );
+            }
+
+            $uuid = $request->query->get('uuid');
+
+            if (isset($uuid)){
+                $savedViz = $this->openFarmAnalyticsManagerService->getChartConfigs(['uuid' => $uuid]);
+                $savedViz = current($savedViz);
+                $chart = $this->createChartData($savedViz->data_element, $savedViz->chart_period, unserialize($savedViz->animal_tags), $savedViz->chart_title);
+                return new JsonResponse( $chart );
+            }
+
              $dataElement = $request->query->get('de');
              $period = $request->query->get('pe');
              $animalTags = $request->query->get('tags');
@@ -75,49 +93,34 @@ class OpenFarmAnalyticsController extends ControllerBase
         return new JsonResponse($response);
     }
     public function saveVisualization(Request $request){
-        /*
-         * if ( 0 === strpos( $request->headers->get( 'Content-Type' ), 'application/json' ) ) {
-      $data = json_decode( $request->getContent(), TRUE );
-      $request->request->replace( is_array( $data ) ? $data : [] );
-    }
 
-    $response['data'] = 'Some test data to return';
-    $response['method'] = 'POST';
-
-    return new JsonResponse( $response );
-         */
         if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
             $data = json_decode($request->getContent(), TRUE );
             //$request->request->replace(is_array($data) ? $data : array());
-            //\Drupal::logger('open_farm_analytics')->notice($data);
-            $dataElement = $request->query->get('de');
-            $period = $request->query->get('pe');
-            $animalTags = $request->query->get('tags');
-            $chartTitle = $request->query->get('title');
-            //\Drupal::logger('open_farm_analytics')->notice($chartTitle);
-            //die();
-            //$status = $this->createChartData($dataElement, $period, implode(',', $animalTags), $chartTitle, TRUE);
+            $dataElement = $data['de'];
+            $period = $data['pe'];
+            $animalTags = $data['tags'];
+            $chartTitle = $data['title'];
 
-            return new JsonResponse(json_encode($data), 200);
+            $status = $this->createChartData($dataElement, $period, $animalTags, $chartTitle, TRUE);
+
+            return new JsonResponse($status, 200);
         }
-        \Drupal::logger('open_farm_analytics')->notice('some errors generated');
 
         return new JsonResponse("Errors adding visualization");
     }
     private function createChartData($dataElement, $period, $animalTags, $chartTitle, $saved = FALSE){
 
         if ($saved){
-            return $animalTags;
-            $this->openFarmAnalyticsManagerService->saveChartConfig([
-                'uuid' => '',
-                'chart_title' => $chartTitle,
-                'chart_period' => $period,
+            $last_insert_id = $this->openFarmAnalyticsManagerService->saveChartConfig([
+                'title' => $chartTitle,
+                'period' => $period,
                 'data_element' => $dataElement,
-                'animal_tags' => $animalTags
+                'tags' => serialize($animalTags),
             ]);
-            return "Chart has been saved.";
+            return $last_insert_id;
         }
-        return 'sfks';
+
         try{
             $periodInstance = $this->periodManager->createInstance($period);
             $periods = $periodInstance->period();

@@ -23,10 +23,10 @@
                         de: $('#edit-de').find(":selected").val(),
                         pe: $('#edit-pe').find(":selected").val(),
                         tags: tags,
-                        title: $( "#edit-pe option:selected" ).text()
+                        title: $( "#edit-pe option:selected" ).text(),
+                        viz_id: 0
                     },
                     success: function (response) {
-                        console.log(response);
                         generateChart(response);
                     },
                     error: function (errorResponse) {
@@ -35,8 +35,26 @@
                 });
 
             });
+            $('#edit-stored-charts').once().change(function () {
+                var selectedViz = $('#edit-stored-charts').find(":selected").val();
+
+                $.ajax({
+                    url: "/open_farm/api/datavalue",
+                    contentType: "application/json",
+                    type: "get",
+                    data: {
+                        uuid: selectedViz
+                    },
+                    success: function (response) {
+                        $('#chart').empty();
+                        generateChart(response);
+                    },
+                    error: function (errorResponse) {
+                        console.log(errorResponse);
+                    }
+                });
+            });
             $('#edit-save-visual').once().click(function () {
-                console.log('Saving this now');
                 var tags = null; //Animal tags
                 //get multi select values. For single tag use $('#edit-src').find(":selected").val()
                 $('#edit-src').each(function () {
@@ -56,11 +74,11 @@
                     data: JSON.stringify({
                         de: $('#edit-de').find(":selected").val(),
                         pe: $('#edit-pe').find(":selected").val(),
-                       // tags: tags,
+                        tags: tags,
                         title: $( "#edit-pe option:selected" ).text()
                     }),
                     success: function (response) {
-                        console.log(response);
+                        updateSaveVisualizationLists(response);
                     },
                     error: function (errorResponse) {
                         console.log(errorResponse);
@@ -103,8 +121,25 @@
                     series: data.series
                 });
             }
-            function f() {
+            function updateSaveVisualizationLists(vizId) {
+                $.ajax({
+                    url: "/open_farm/api/datavalue",
+                    contentType: "application/json",
+                    type: "get",
+                    data: {
+                        viz_id: vizId
+                    },
+                    success: function (response) {
+                        $('#edit-stored-charts').append($('<option>', {
+                            value: response.uuid,
+                            text: response.chart_title
+                        }));
 
+                    },
+                    error: function (errorResponse) {
+                        console.log(errorResponse);
+                    }
+                });
             }
         }
     };

@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\open_farm_analytics\Service\OpenFarmAnalyticsInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\open_farm\Plugin\Period\PeriodManager;
 use Drupal\open_farm\Service\OpenFarmServiceInterface;
@@ -15,6 +16,7 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
 {
     protected $periodManager;
     protected $openFarmManagerService;
+    protected $openFarmAnalyticService;
 
     public function getFormId(){
         return 'open_farm_analytics_visualizer_form';
@@ -24,15 +26,19 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
      * OpenFarmAnalyticsVisualizerForm constructor.
      * @param PeriodManager $periodManager
      * @param OpenFarmServiceInterface $openFarmManagerService
+     * @param OpenFarmAnalyticsInterface $openFarmAnalyticService
      */
-    public function __construct(PeriodManager $periodManager, OpenFarmServiceInterface $openFarmManagerService){
+    public function __construct(PeriodManager $periodManager, OpenFarmServiceInterface $openFarmManagerService,
+                                OpenFarmAnalyticsInterface $openFarmAnalyticService){
         $this->periodManager = $periodManager;
         $this->openFarmManagerService = $openFarmManagerService;
+        $this->openFarmAnalyticService = $openFarmAnalyticService;
     }
     public static function create(ContainerInterface $container) {
         return new static(
             $container->get('plugin.manager.periods'),
-            $container->get('open_farm.manager_service')
+            $container->get('open_farm.manager_service'),
+            $container->get('open_farm_analytics.manager_service')
         );
     }
     public function buildForm(array $form, FormStateInterface $form_state) {
@@ -54,11 +60,32 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
 
         }
 
+        $storedConfigs = $this->openFarmAnalyticService->getChartConfigs([]);
+        $storedVisualizations = array('0' => 'select');
+
+        foreach ($storedConfigs as $storedConfig){
+            $storedVisualizations[$storedConfig->uuid] = $storedConfig->id.'->'.$storedConfig->chart_title.' - '.$storedConfig->uuid;
+        }
+        //print_r($storedVisualizations); die();
+
         $form['dimensions'] = array(
             '#type' => 'fieldset',
             '#title' => $this->t(''),
             '#prefix' => '<div class="flex-container">',
             '#suffix' => '</div>',
+        );
+        $form['dimensions']['stored_charts'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Stored visualizations'),
+            '#options' => $storedVisualizations,
+            //'#default_value' => 'milk',
+            //'#required' => TRUE,
+            '#prefix' => '<div class="stored_charts">',
+            '#suffix' => '</div>',
+        );
+        $form['dimensions']['separator'] = array(
+            '#type' => 'markup',
+            '#markup' =>'<div class="saved_create"></div>',
         );
         $form['dimensions']['de'] = array(
             '#type' => 'select',

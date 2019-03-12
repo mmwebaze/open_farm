@@ -4,6 +4,7 @@ namespace Drupal\open_farm_analytics\Service;
 
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\open_farm\Service\OpenFarmServiceInterface;
+use Drupal\Component\Uuid\Php;
 
 class OpenFarmAnalyticsManager implements OpenFarmAnalyticsInterface
 {
@@ -14,10 +15,15 @@ class OpenFarmAnalyticsManager implements OpenFarmAnalyticsInterface
      * @var \Drupal\Core\Database\Driver\mysql\Connection
      */
     protected $connection;
-    public function __construct(OpenFarmServiceInterface $openFarmService, Connection $connection)
+    /**
+     * @var \Drupal\Component\Uuid\Php
+     */
+    protected $uuidService;
+    public function __construct(OpenFarmServiceInterface $openFarmService, Connection $connection, Php $uuidService)
     {
         $this->openFarmService = $openFarmService;
         $this->connection = $connection;
+        $this->uuidService = $uuidService;
     }
     public function getDataValues($dataElement, $periods, $animalTags){
 
@@ -44,11 +50,13 @@ class OpenFarmAnalyticsManager implements OpenFarmAnalyticsInterface
      */
     public function saveChartConfig(array $chartConfig){
         try {
-            $this->connection->insert('open_farm_analytics_stored_charts')
+            $last_insert_id = $this->connection->insert('open_farm_analytics_stored_charts')
                 ->fields([
                     'uuid', 'chart_title', 'chart_period', 'data_element', 'animal_tags'
-                ])->values(['uuid'=>$chartConfig->uuid, 'chart_title'=>$chartConfig, 'chart_period'=>$chartConfig->chart_period,
-                    'data_element'=>$chartConfig->data_element, 'animal_tags'=>$chartConfig->animal_tags])->execute();
+                ])->values(['uuid'=>$this->uuidService->generate(), 'chart_title' => $chartConfig['title'], 'chart_period' => $chartConfig['period'],
+                    'data_element'=>$chartConfig['data_element'], 'animal_tags' => $chartConfig['tags']])->execute();
+
+            return $last_insert_id;
         } catch (\Exception $e) {
             //@todo replace by logging and redirect to error page
             print_r($e->getMessage());
@@ -61,9 +69,14 @@ class OpenFarmAnalyticsManager implements OpenFarmAnalyticsInterface
         $query = $this->connection->select('open_farm_analytics_stored_charts', 'ch');
         $query->fields('ch');
         if(!empty($options)){
-            $query->condition('uuid', $options['uuid']);
+            //$query->condition('uuid', $options['uuid']);
+            foreach ($options as $field => $value){
+                $query->condition($field, $value);
+            }
+
         }
         $query->range(0, $limit);
+        $query->orderBy("id", 'DESC');
         return $query->execute()->fetchAll();
     }
 

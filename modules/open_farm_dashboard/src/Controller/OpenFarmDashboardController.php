@@ -37,20 +37,44 @@ class OpenFarmDashboardController extends ControllerBase
         );
     }
     public function dashboard() {
-        $storedVizs = $this->openFarmAnalyticsManagerService->getChartConfigs([], 3);
-        $dashlets = array();
+
+        //die();
+        $storedVizs = $this->openFarmAnalyticsManagerService->getChartConfigs([], 4);
+        $charts = array();
         foreach ($storedVizs as $storedViz)
         {
-            $dashlets[$storedViz->uuid] = json_encode($this->createChartData($storedViz->data_element, $storedViz->chart_period, unserialize($storedViz->animal_tags), $storedViz->chart_title));
+            $charts[$storedViz->uuid] = json_encode($this->createChartData($storedViz->data_element, $storedViz->chart_period, unserialize($storedViz->animal_tags), $storedViz->chart_title));
+        }
+        $cols = 3;
+        $dashlets = count($charts);
+        $rows = 1;
+        if ($dashlets > $cols){
+            $reminder = $dashlets % $cols;
+            if ($reminder == 0){
+                $rows = floor($dashlets/$cols);
+                print_r('Dashlets: '.$dashlets.' - rows: '.$rows);
+            }
+            else{
+                $round = floor($dashlets/$cols);
+                $rows = $rows + $round;
+                print_r('Dashlets: '.$dashlets.' - rows: '.$rows);
+            }
+
+        }
+        else{
+            print_r('Dashlets: '.$dashlets.' - rows: '.$rows);
         }
         //print_r($dashlets);die();
         $render = array(
             '#theme' => 'open_farm_dashboard',
-            '#viz_data' => array_keys($dashlets),
+            '#viz_data' => ['ids'=>array_keys($charts), 'rows' => $rows, 'cols' => $cols],
             '#attached' => array(
                 'library' => array('open_farm_dashboard/dashboard'),
                 'drupalSettings' => array(
-                    'dashlets' => $dashlets
+                    'charts' => $charts,
+                    'rows' => $rows,
+                    'cols' => $cols,
+                    'ids' => array_keys($charts)
                 )
             )
         );

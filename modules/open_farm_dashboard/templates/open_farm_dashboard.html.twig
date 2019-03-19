@@ -1,5 +1,26 @@
+
 <div class="dashboard-container">
-    {% for position in viz_data %}
-        <div id="{{ position }}"></div>
+<div class="columns">
+    <div id="8bcd3576-3659-4025-b7b8-1726f1de65f2" class="column"></div>
+    <div id="1e13d914-839b-468b-a6b9-5def029005df" class="column"></div>
+    <div id="314ae0d3-6b58-45c2-9c59-5bd13eef575b" class="column"></div>
+</div>
+    <div class="columns">
+        <div id="e770ad79-d99d-4d71-a482-f13081c9c8e3" class="column"></div>
+        <div id="8bcd3576-3659-4025-b7b8" class="column"></div>
+        <div id="8bcd3576-3659-b7b8-1726f1de65f2" class="column"></div>
+    </div>
+</div>
+{#
+{% set count = 0 %}
+<div class="dashboard-container">
+    {% for col in 0..viz_data['cols'] %}
+        <div class="columns">
+            {% for row in 0..viz_data['rows'] %}
+                <div id={{ viz_data['ids'][count] }} class="column">{{ viz_data['ids'][count] }}</div>
+                {% set count = count + 1 %}
+            {% endfor %}
+        </div>
     {% endfor %}
 </div>
+#}

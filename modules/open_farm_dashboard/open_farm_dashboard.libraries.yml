@@ -10,3 +10,4 @@ dashboard:
     - core/drupal
     - core/drupalSettings
     - open_farm_analytics/highcharts
+    - open_farm/bulma

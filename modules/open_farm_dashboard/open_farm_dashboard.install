@@ -1,0 +1,19 @@
+<?php
+/**
+ * Implements hook_install.
+ */
+function open_farm_dashboard_install(){
+    $roles = array('dashboard' => 'DASHBOARD');
+    foreach ($roles as $id => $label){
+        \Drupal::service('open_farm.manager_service')->createRole($id, $label);
+    }
+}
+/**
+ * Implements hook_uninstall.
+ */
+function open_farm_dashboard_uninstall(){
+    $roles = array('dashboard');
+    foreach ($roles as $role){
+        \Drupal::service('open_farm.manager_service')->removeRole($role);
+    }
+}

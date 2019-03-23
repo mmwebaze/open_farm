@@ -35,7 +35,7 @@ open_farm.open_farm_collection_form:
     _form: '\Drupal\open_farm\Form\OpenFarmCollectionForm'
     _title: 'Open Farm Collection Form'
   requirements:
-    _permission: 'access content'
+    _permission: 'collect farm data'
   
 open_farm.open_farm_collected_data_form:
   path: '/open_farm/form/open_farm_collected'

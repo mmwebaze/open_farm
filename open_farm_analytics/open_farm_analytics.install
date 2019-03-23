@@ -34,6 +34,13 @@ function open_farm_analytics_schema(){
                 'default' => '',
                 'description' => "Visualization period.",
             ),
+            'chart_type' => array(
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => TRUE,
+                'default' => '',
+                'description' => "Visualization type (column, line, pie).",
+            ),
             'data_element' => array(
                 'type' => 'varchar',
                 'length' => 255,
@@ -53,4 +60,33 @@ function open_farm_analytics_schema(){
     );
 
     return $schema;
+}
+function open_farm_analytics_update_8101(){
+    $chart_type = array(
+        'mysql_type' => 'varchar',
+        'length' => 255,
+        'description' => t('Visualization type (column, line, pie).'),
+        'not null' => TRUE,
+        'default' => 'line'
+    );
+    $schema = \Drupal\Core\Database\Database::getConnection()->schema();
+    $schema->addField('open_farm_analytics_stored_charts', 'chart_type', $chart_type);
+}
+/**
+ * Implements hook_install.
+ */
+function open_farm_analytics_install(){
+    $roles = array('analytics' => 'ANALYTICS');
+    foreach ($roles as $id => $label){
+        \Drupal::service('open_farm.manager_service')->createRole($id, $label);
+    }
+}
+/**
+ * Implements hook_uninstall.
+ */
+function open_farm_dashboard_uninstall(){
+    $roles = array('analytics');
+    foreach ($roles as $role){
+        \Drupal::service('open_farm.manager_service')->removeRole($role);
+    }
 }

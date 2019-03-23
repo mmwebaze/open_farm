@@ -38,50 +38,42 @@ class OpenFarmDashboardController extends ControllerBase
     }
     public function dashboard() {
 
-        //die();
-        $storedVizs = $this->openFarmAnalyticsManagerService->getChartConfigs([], 4);
+        //This limit i.e number of chart configurations will be stored as part of the dashboard configurations.
+        $storedVizs = $this->openFarmAnalyticsManagerService->getChartConfigs([], 5);
         $charts = array();
         foreach ($storedVizs as $storedViz)
         {
-            $charts[$storedViz->uuid] = json_encode($this->createChartData($storedViz->data_element, $storedViz->chart_period, unserialize($storedViz->animal_tags), $storedViz->chart_title));
+            $charts[$storedViz->uuid] = json_encode($this->createChartData($storedViz->data_element, $storedViz->chart_period, unserialize($storedViz->animal_tags), $storedViz->chart_title, $storedViz->chart_type));
         }
-        $cols = 3;
+        $cols = 3; //@to_do this value will be stored as part of the dashboard configurations.
         $dashlets = count($charts);
         $rows = 1;
         if ($dashlets > $cols){
             $reminder = $dashlets % $cols;
             if ($reminder == 0){
                 $rows = floor($dashlets/$cols);
-                print_r('Dashlets: '.$dashlets.' - rows: '.$rows);
             }
             else{
                 $round = floor($dashlets/$cols);
                 $rows = $rows + $round;
-                print_r('Dashlets: '.$dashlets.' - rows: '.$rows);
             }
 
         }
-        else{
-            print_r('Dashlets: '.$dashlets.' - rows: '.$rows);
-        }
-        //print_r($dashlets);die();
+
         $render = array(
             '#theme' => 'open_farm_dashboard',
             '#viz_data' => ['ids'=>array_keys($charts), 'rows' => $rows, 'cols' => $cols],
             '#attached' => array(
                 'library' => array('open_farm_dashboard/dashboard'),
                 'drupalSettings' => array(
-                    'charts' => $charts,
-                    'rows' => $rows,
-                    'cols' => $cols,
-                    'ids' => array_keys($charts)
+                    'charts' => $charts
                 )
             )
         );
 
         return $render;
     }
-    private function createChartData($dataElement, $period, $animalTags, $chartTitle){
+    private function createChartData($dataElement, $period, $animalTags, $chartTitle, $chartType){
         try{
             $periodInstance = $this->periodManager->createInstance($period);
             $periods = $periodInstance->period();
@@ -128,6 +120,7 @@ class OpenFarmDashboardController extends ControllerBase
         $chart->series = $series;
         $chart->categories = $periods;
         $chart->title = $chartTitle;
+        $chart->chart = $chartType;
 
         return $chart;
     }

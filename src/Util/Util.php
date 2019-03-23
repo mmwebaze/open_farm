@@ -11,10 +11,8 @@ class Util
             $output[$result->id] = [
                 'animal_tag' => $result->animal_tag,
                 'data_element' => $result->data_element,
-                'collection_date' => $result->collection_date,
+                'collection_date' => $result->date_collected,
                 'amount' => $result->amount,
-                //'time_queued' => Util::getDate($result->timestamp_when_queued),
-                //'time_sent' => Util::getDate($result->timestamp_when_sent),
             ];
         }
         return $output;

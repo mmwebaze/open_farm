@@ -24,10 +24,17 @@
                         pe: $('#edit-pe').find(":selected").val(),
                         tags: tags,
                         title: $( "#edit-pe option:selected" ).text(),
+                        chart: $("#edit-chart-types option:selected").val(),
                         viz_id: 0
                     },
                     success: function (response) {
-                        generateChart(response);
+                        console.log(response);
+                        if (response.chart === 'pie'){
+                            generatePieChart(response);
+                        }
+                        else{
+                            generateChart(response);
+                        }
                     },
                     error: function (errorResponse) {
                         console.log(errorResponse);
@@ -47,7 +54,12 @@
                     },
                     success: function (response) {
                         $('#chart').empty();
-                        generateChart(response);
+                        if (response.chart === 'pie'){
+                            generatePieChart(response);
+                        }
+                        else{
+                            generateChart(response);
+                        }
                     },
                     error: function (errorResponse) {
                         console.log(errorResponse);
@@ -55,6 +67,7 @@
                 });
             });
             $('#edit-save-visual').once().click(function () {
+
                 var tags = null; //Animal tags
                 //get multi select values. For single tag use $('#edit-src').find(":selected").val()
                 $('#edit-src').each(function () {
@@ -75,7 +88,8 @@
                         de: $('#edit-de').find(":selected").val(),
                         pe: $('#edit-pe').find(":selected").val(),
                         tags: tags,
-                        title: $( "#edit-pe option:selected" ).text()
+                        title: $( "#edit-pe option:selected" ).text(),
+                        chart: $("#edit-chart-types option:selected").val(),
                     }),
                     success: function (response) {
                         updateSaveVisualizationLists(response);
@@ -85,11 +99,10 @@
                     }
                 });
             });
-
             function generateChart(data) {
                 Highcharts.chart('chart', {
                     chart: {
-                        type: 'column'
+                        type: data.chart
                     },
                     title: {
                         text: data.title
@@ -119,6 +132,43 @@
                         }
                     },
                     series: data.series
+                });
+            }
+            function generatePieChart(data) {
+                var pieData = [];
+                for(var i = 0; i < data.series.length; i++){
+                    var sum = 0;
+                    for (var j = 0; j < data.series[i].data.length; j++){
+                        sum += data.series[i].data[j];
+                    }
+                    var d = {name: data.series[i].name, y: sum};
+                    pieData.push(d);
+                }
+
+                Highcharts.chart('chart', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: data.title
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{data: pieData}]
                 });
             }
             function updateSaveVisualizationLists(vizId) {

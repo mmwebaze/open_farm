@@ -52,9 +52,9 @@ class OpenFarmAnalyticsManager implements OpenFarmAnalyticsInterface
         try {
             $last_insert_id = $this->connection->insert('open_farm_analytics_stored_charts')
                 ->fields([
-                    'uuid', 'chart_title', 'chart_period', 'data_element', 'animal_tags'
+                    'uuid', 'chart_title', 'chart_period', 'data_element', 'animal_tags', 'chart_type'
                 ])->values(['uuid'=>$this->uuidService->generate(), 'chart_title' => $chartConfig['title'], 'chart_period' => $chartConfig['period'],
-                    'data_element'=>$chartConfig['data_element'], 'animal_tags' => $chartConfig['tags']])->execute();
+                    'data_element'=>$chartConfig['data_element'], 'animal_tags' => $chartConfig['tags'], 'chart_type' => $chartConfig['chart']])->execute();
 
             return $last_insert_id;
         } catch (\Exception $e) {

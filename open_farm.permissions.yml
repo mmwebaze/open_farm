@@ -36,3 +36,7 @@ view published open farm data store entities:
 
 view unpublished open farm data store entities:
   title: 'View unpublished Open farm data store entities'
+
+collect farm data:
+  title: 'Access to data collection form'
+  description: 'Allows for collection of farm data'

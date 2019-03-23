@@ -18,6 +18,16 @@ interface OpenFarmServiceInterface
      * An array of taxonomy terms belong to vocabulary with specified vid.
      */
     public function getTaxonomyTerms($vid, $termName = null);
+
+    /**
+     * Gets animal by its tag id
+     *
+     * @param string $animalId
+     * Unique id belonging to an animal.
+     *
+     * @return \Drupal\Core\Entity\EntityInterface[]
+     * An array of Animal entity objects indexed by their IDs.
+     */
     public function getAnimalByTag($animalId);
 
     /**
@@ -42,4 +52,24 @@ interface OpenFarmServiceInterface
     public function getAnimalByName($animalName);
     public function createNode( $data);
     public function getDataStores($status = 1);
+
+    /**
+     * Creates a new roles.
+     *
+     * @param string $id
+     * The role id
+     *
+     * @param string $label
+     * The role label
+     *
+     */
+    public function createRole($id, $label);
+
+    /**
+     * Deletes a role.
+     *
+     * @param string $id
+     * The id of the role to be deleted.
+     */
+    public function removeRole($id);
 }

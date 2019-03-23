@@ -3,50 +3,26 @@
 
     Drupal.behaviors.open_farm_dashboard = {
         attach: function (context, settings) {
-            //var dashboard = '<div class="dashboard-container"></div>';
             $(context).find('.dashboard-container').once('open_farm_dashboard').each(function () {
                 var charts = drupalSettings.charts;
-                var rows = drupalSettings.rows;
-                var cols = drupalSettings.cols;
-                var ids = drupalSettings.ids;
 
-                console.log(rows+' -- '+cols);
-                var tempDiv = '';
-                var count = 0;
-               /* for (var row = 0; row < rows; row++){
-                    var rw = '<div>';
-                    var colm = '<div class="columns">';
-                    for(var col = 0; col < cols; col++){
-                        var divId = ids[count];
-
-                        if (divId !== undefined){
-                            colm += '<div id='+ids[count]+' class="column is-one-third">*'+ids[count]+'*</div>';
-                            count++;
-                        }
-                    }
-                    rw = colm+'</div></div>';
-                    //$('.dashboard-container').prepend(rw);
-                    tempDiv += rw;
-                }
-                $('.dashboard-container').append(tempDiv);*/
                 for(var uuid in charts){
-
                     console.log(uuid);
                     console.log(JSON.parse(charts[uuid]).series);
-                    generateChart(uuid, JSON.parse(charts[uuid]));
-                    console.log(uuid);
+
+                    if (JSON.parse(charts[uuid]).chart === 'pie'){
+                        generatePieChart(uuid, JSON.parse(charts[uuid]));
+                    }
+                    else{
+                        generateChart(uuid, JSON.parse(charts[uuid]));
+                    }
                 }
             });
-
-
-
-//console.log(positions);
-
 
             function generateChart(position, data){
                 var chart = Highcharts.chart(position, {
                     chart: {
-                        type: 'column'
+                        type: data.chart
                         //width: 400
                     },
                     title: {
@@ -82,6 +58,43 @@
                     series: data.series
                 });
                 chart.reflow();
+            }
+            function generatePieChart(position, data) {
+                var pieData = [];
+                for(var i = 0; i < data.series.length; i++){
+                    var sum = 0;
+                    for (var j = 0; j < data.series[i].data.length; j++){
+                        sum += data.series[i].data[j];
+                    }
+                    var d = {name: data.series[i].name, y: sum};
+                    pieData.push(d);
+                }
+
+                Highcharts.chart(position, {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: data.title
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{data: pieData}]
+                });
             }
 
         }

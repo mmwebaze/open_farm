@@ -71,7 +71,7 @@ class OpenFarmAnalyticsController extends ControllerBase
             if (isset($uuid)){
                 $savedViz = $this->openFarmAnalyticsManagerService->getChartConfigs(['uuid' => $uuid]);
                 $savedViz = current($savedViz);
-                $chart = $this->createChartData($savedViz->data_element, $savedViz->chart_period, unserialize($savedViz->animal_tags), $savedViz->chart_title);
+                $chart = $this->createChartData($savedViz->data_element, $savedViz->chart_period, unserialize($savedViz->animal_tags), $savedViz->chart_title, $savedViz->chart_type);
                 return new JsonResponse( $chart );
             }
 
@@ -79,13 +79,14 @@ class OpenFarmAnalyticsController extends ControllerBase
              $period = $request->query->get('pe');
              $animalTags = $request->query->get('tags');
              $chartTitle = $request->query->get('title');
+             $chartType = $request->query->get('chart');
              /*$test = new \stdClass();
              $test->period = $period;
              $test->tags = $animalTags;
              $test->title = $chartTitle;
              $test->dataElement = $dataElement;*/
 
-             $chart = $this->createChartData($dataElement, $period, $animalTags, $chartTitle);
+             $chart = $this->createChartData($dataElement, $period, $animalTags, $chartTitle, $chartType);
 
             return new JsonResponse( $chart );
          }
@@ -101,15 +102,16 @@ class OpenFarmAnalyticsController extends ControllerBase
             $period = $data['pe'];
             $animalTags = $data['tags'];
             $chartTitle = $data['title'];
+            $chartType = $data['chart'];
 
-            $status = $this->createChartData($dataElement, $period, $animalTags, $chartTitle, TRUE);
+            $status = $this->createChartData($dataElement, $period, $animalTags, $chartTitle, $chartType, TRUE);
 
             return new JsonResponse($status, 200);
         }
 
         return new JsonResponse("Errors adding visualization");
     }
-    private function createChartData($dataElement, $period, $animalTags, $chartTitle, $saved = FALSE){
+    private function createChartData($dataElement, $period, $animalTags, $chartTitle, $chartType, $saved = FALSE){
 
         if ($saved){
             $last_insert_id = $this->openFarmAnalyticsManagerService->saveChartConfig([
@@ -117,6 +119,7 @@ class OpenFarmAnalyticsController extends ControllerBase
                 'period' => $period,
                 'data_element' => $dataElement,
                 'tags' => serialize($animalTags),
+                'chart' => $chartType
             ]);
             return $last_insert_id;
         }
@@ -167,6 +170,7 @@ class OpenFarmAnalyticsController extends ControllerBase
         $chart->series = $series;
         $chart->categories = $periods;
         $chart->title = $chartTitle;
+        $chart->chart = $chartType;
 
         return $chart;
     }

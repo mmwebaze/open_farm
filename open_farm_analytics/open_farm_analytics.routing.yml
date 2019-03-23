@@ -11,7 +11,8 @@ open_farm_analytics.visualizer_form:
   defaults:
     _form: '\Drupal\open_farm_analytics\Form\OpenFarmAnalyticsVisualizerForm'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'analytics visualizer'
+
 open_farm_analytics.datavalue:
   path: '/open_farm/api/datavalue'
   defaults:
@@ -19,7 +20,7 @@ open_farm_analytics.datavalue:
     #_title: 'Get visualization data'
   methods: [GET]
   requirements:
-    _permission: 'access content'
+    _permission: 'analytics visualizer'
 
 open_farm_analytics.visualization_save:
   path: '/open_farm/api/visualization/save'
@@ -27,4 +28,4 @@ open_farm_analytics.visualization_save:
     _controller: '\Drupal\open_farm_analytics\Controller\OpenFarmAnalyticsController::saveVisualization'
   methods:  [POST]
   requirements:
-    _permission: 'access content'
+    _permission: 'analytics visualizer'

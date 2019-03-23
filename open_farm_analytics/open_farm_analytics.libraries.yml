@@ -38,6 +38,22 @@ billboard:
   dependencies:
     - open_farm_analytics/d3
 
+bootstrap:
+  remote: https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css
+  version: 4.3.1
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+    gpl-compatible: true
+  css:
+    theme:
+      css/libraries/bootstrap/bootstrap.min.css: { }
+  js:
+    js/libraries/popper.min.js: { }
+    js/libraries/bootstrap/bootstrap.min.js: { }
+  dependencies:
+    - core/jquery
+
 visualizer:
   js:
     js/open_farm_analytics_visualizer.js: {}
@@ -51,3 +67,4 @@ visualizer:
     - core/drupalSettings
     #- open_farm_analytics/billboard
     - open_farm_analytics/highcharts
+    #- open_farm_analytics/bootstrap

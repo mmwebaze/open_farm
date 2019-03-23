@@ -74,19 +74,11 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
             '#prefix' => '<div class="flex-container">',
             '#suffix' => '</div>',
         );
-        $form['dimensions']['stored_charts'] = array(
-            '#type' => 'select',
-            '#title' => $this->t('Stored visualizations'),
-            '#options' => $storedVisualizations,
-            //'#default_value' => 'milk',
-            //'#required' => TRUE,
-            '#prefix' => '<div class="stored_charts">',
-            '#suffix' => '</div>',
-        );
-        $form['dimensions']['separator'] = array(
+
+       /* $form['title_modal'] = array(
             '#type' => 'markup',
-            '#markup' =>'<div class="saved_create"></div>',
-        );
+            '#markup' =>'<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open modal</button>',
+        );*/
         $form['dimensions']['de'] = array(
             '#type' => 'select',
             '#title' => $this->t('data'),
@@ -115,6 +107,30 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
             '#prefix' => '<div class="data_element">',
             '#suffix' => '</div>',
         );
+        $form['dimensions']['chart_types'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Chart Type'),
+            '#options' => ['column' => 'Column', 'line' => 'Line', 'pie' => 'Pie'],
+            '#default_value' => ['column'],
+            '#required' => TRUE,
+            '#prefix' => '<div class="data_element">',
+            '#suffix' => '</div>',
+        );
+        $form['stored_visuals'] = array(
+            '#type' => 'fieldset',
+            '#title' => $this->t(''),
+            '#prefix' => '<div class="flex-container">',
+            '#suffix' => '</div>',
+        );
+        $form['stored_visuals']['stored_charts'] = array(
+            '#type' => 'select',
+            '#title' => $this->t('Stored visualizations'),
+            '#options' => $storedVisualizations,
+            //'#default_value' => 'milk',
+            //'#required' => TRUE,
+            '#prefix' => '<div class="stored_charts">',
+            '#suffix' => '</div>',
+        );
 
         $form['buttons_pane'] = array(
             '#type' => 'fieldset',
@@ -125,6 +141,14 @@ class OpenFarmAnalyticsVisualizerForm extends FormBase
         $form['buttons_pane']['save_visual'] = array(
             '#type' => 'button',
             '#value' => $this->t('Save this for later'),
+            '#attributes' => array(
+                'data-toggle' => array(
+                    'modal'
+                ),
+                'data-target' => array(
+                    '#myModal'
+                )
+            ),
             '#ajax' => array(
                 'callback' => '::saveVisualization',
                 'event' => 'click',

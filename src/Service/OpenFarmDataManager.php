@@ -27,13 +27,13 @@ class OpenFarmDataManager implements OpenFarmDataServiceInterface
                 'animal_tag' => $values['animal_tag'],
                 'data_element' => $values['data_element'],
                 'period' => $values['period'],
-                'collection_date' => $values['collection_date'],
+                'date_collected' => $values['date_collected'],
                 'amount' => $values['amount'],
             );
             try {
                 $this->connection->insert('open_farm_data_value')
                     ->fields([
-                        'animal_tag', 'data_element', 'period', 'collection_date', 'amount'
+                        'animal_tag', 'data_element', 'period', 'date_collected', 'amount'
                     ])->values($value)->execute();
             } catch (\Exception $e) {
                 //@todo replace by logging and redirect to error page

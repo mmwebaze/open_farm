@@ -54,6 +54,7 @@ class OpenFarmCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+
       $date = new DrupalDateTime();
 
       $needle = 'morning';
@@ -66,7 +67,7 @@ class OpenFarmCollectionForm extends FormBase {
         '#title' => $this->t('General Farm Collection Form'),
     );
     $periods = $this->openFarmManagerService->getTaxonomyTerms('periods');
-    //print_r($periods);die($needle);
+
     $form['open_farm_collection']['period'] = array(
         '#type' => 'select',
         '#title' => $this->t('Period'),
@@ -95,13 +96,7 @@ class OpenFarmCollectionForm extends FormBase {
             ),
         ),
     );
-    /*$form['open_farm_collection']['animal_type'] = array(
-        '#type' => 'select',
-        '#title' => $this->t('Animal Type'),
-        '#options' => array(
-            'COWS', 'GOATS'
-        ),
-    );*/
+
     $form['open_farm_collection']['amount_collected'] = array(
         '#type' => 'number',
         '#title' => $this->t('Amount'),
@@ -153,7 +148,7 @@ class OpenFarmCollectionForm extends FormBase {
           'animal_tag' => $animalTag,
           'period' => $period,
           'data_element' => 'Milk',
-          'collection_date' => $collectionDate->format('Y-m-d'),
+          'date_collected' => $collectionDate->format('Y-m-d'),
           'amount' => $amount
       ]);
   }
@@ -167,7 +162,6 @@ class OpenFarmCollectionForm extends FormBase {
       else{
           $id = current($animal)->id();
           $form_state->set('animal_id', "".$id);
-          //\Drupal::logger('open_farm')->notice(' <-#$#-> '.$id.' ****');
       }
       $ajax_response = new AjaxResponse();
 
